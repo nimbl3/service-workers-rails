@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+    image: postgres:9.6.1
+    container_name: service-workers-rails_db
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: service-workers-rails_web
+    command: bin/rails server --port 3000 --binding 0.0.0.0
+    ports:
+      - "3000:3000"
+    links:
+      - db
+    volumes:
+      - .:/service-workers-rails
+    volumes_from:
+        - bundle
+
+  bundle:
+    image: busybox
+    volumes:
+      - /bundle
