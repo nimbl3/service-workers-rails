@@ -1,23 +1,17 @@
-var CACHE_NAME = 'my-site-cache-v1';
+var CACHE_NAME = 'my-site-cache-v2';
 
 var urlsToCache = [
-  '/assets/application.self.css',
-  '/assets/jquery.self.js',
-  '/assets/action_cable.self.js',
-  '/assets/cable.self.js',
-  '/assets/serviceWorkerInitializer.self.js',
-  '/assets/users.self.js',
-  '/assets/application.self.js',
-  '/assets/jquery_ujs.self.js',
+  '/assets/application.js',
+  '/assets/application.css',
   '/'
 ];
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
   console.log('[ServiceWorker] Install');
   // Perform install steps
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(function(cache) {
+    .then(function (cache) {
         console.log('[ServiceWorker] Caching app shell');
         return cache.addAll(urlsToCache);
       })
@@ -64,11 +58,11 @@ self.addEventListener('fetch', function(event) {
   );
 });
 
-self.addEventListener('activate', function(e) {
+self.addEventListener('activate', function (e) {
   console.log('[ServiceWorker] Activate');
   e.waitUntil(
-    caches.keys().then(function(keyList) {
-      return Promise.all(keyList.map(function(key) {
+    caches.keys().then(function (keyList) {
+      return Promise.all(keyList.map(function (key) {
         if (key !== CACHE_NAME) {
           console.log('[ServiceWorker] Removing old cache', key);
           return caches.delete(key);
