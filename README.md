@@ -1,24 +1,30 @@
-# README
+## Introduction
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a sample Progressive Web App(PWA) project built on Rails.
 
-Things you may want to cover:
+## Setup
 
-* Ruby version
+* Disable the `debug` mode for assets in development. This is allow 
+concatenation of assets in development and so `service workers` 
+could be configured to cache the built asset files. For the purpose
+of this project, `application.js` and `application.css` are cached.
 
-* System dependencies
+* Register the `service worker`. It can be done using
 
-* Configuration
+```
+navigator.serviceWorker.register('/serviceWorker.js')
+```
 
-* Database creation
+We keep the initialiser with other `.js` files.
 
-* Database initialization
+* Prepare the `service worker`. The path for the worker should match the one provided to the `serviceWorker.register` method.
+Service Workers should be publicly accessible. It can be placed inside the `assets` folder and then precompiled as a separate
+file with `finger-print` disabled or simply placed under the `public` folder.
 
-* How to run the test suite
+For the purpose of this project, we place it inside `public/`.
 
-* Services (job queues, cache servers, search engines, etc.)
+* We use the event handlers for service workers as defined 
+[here](https://developers.google.com/web/fundamentals/getting-started/codelabs/your-first-pwapp/).
 
-* Deployment instructions
-
-* ...
+    Basically, the service workers have a list of relative paths to cache. Any network request to those path would be 
+cached. 
