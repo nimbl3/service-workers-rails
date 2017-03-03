@@ -30,6 +30,7 @@ end
 gem 'jquery-rails' # Use jquery as the JavaScript library
 gem 'font-awesome-sass' # Font-Awesome Sass gem for use in Ruby/Rails projects
 gem 'sass-rails' # SASS
+gem 'momentjs-rails' # momentjs
 
 group :development do
   gem 'better_errors' # Better error page for Rails and other Rack apps

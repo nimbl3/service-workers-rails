@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ServiceWorkersRails</title>
-    <%= csrf_meta_tags %>
+<head>
+  <title>ServiceWorkersRails</title>
+  <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all' %>
-    <%= javascript_include_tag 'application' %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
 
-    <link rel="manifest" href="/manifest.json" />
-  <body>
-    <%= yield %>
-  </body>
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#4285f4">
+</head>
+<body class="<%= controller_name %> <%= action_name %>">
+
+<div class="loading is-fullscreen">
+  <div class="loading-item-container">
+    <div class="loading-item"></div>
+    <div class="loading-item"></div>
+    <div class="loading-item"></div>
+  </div>
+</div>
+
+<%= yield %>
+</body>
 </html>

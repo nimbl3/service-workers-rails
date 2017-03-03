@@ -1,48 +1,43 @@
-var CACHE_NAME = 'my-site-cache-v1';
+var CACHE_NAME = 'my-site-cache-v2';
 
 var urlsToCache = [
-  '/assets/application.self.css',
-  '/assets/jquery.self.js',
-  '/assets/action_cable.self.js',
-  '/assets/cable.self.js',
-  '/assets/serviceWorkerInitializer.self.js',
-  '/assets/users.self.js',
-  '/assets/application.self.js',
-  '/assets/jquery_ujs.self.js',
+  '/assets/application.js',
+  '/assets/application.css',
   '/'
 ];
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
   console.log('[ServiceWorker] Install');
   // Perform install steps
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(function(cache) {
+    .then(function (cache) {
         console.log('[ServiceWorker] Caching app shell');
         return cache.addAll(urlsToCache);
       })
+    .catch(function() {
+      console.error('cache failure')
+    })
   );
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
   event.respondWith(
     caches.match(event.request)
-      .then(function(response) {
+    .catch(function() {
+      debugger
+    })
+    .then(function (response) {
         // Cache hit - return response
         if (response) {
           return response;
         }
         
-        // IMPORTANT: Clone the request. A request is a stream and
-        // can only be consumed once. Since we are consuming this
-        // once by cache and once by the browser for fetch, we need
-        // to clone the response.
         var fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest).then(
-          function(response) {
+        return fetch(fetchRequest)
+          .then(function (response) {
             // Check if we received a valid response
-            if(!response || response.status !== 200 || response.type !== 'basic') {
+            if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
             
@@ -53,22 +48,31 @@ self.addEventListener('fetch', function(event) {
             var responseToCache = response.clone();
             
             caches.open(CACHE_NAME)
-              .then(function(cache) {
+              .then(function (cache) {
                 cache.put(event.request, responseToCache);
+              })
+              .catch(function(error) {
+                debugger
+                return {
+                  error: error.message
+                };
               });
-            
             return response;
-          }
-        );
+          })
+          .catch(function(error) {
+            return {
+              error: error.message
+            };
+          });
       })
   );
 });
 
-self.addEventListener('activate', function(e) {
+self.addEventListener('activate', function (e) {
   console.log('[ServiceWorker] Activate');
   e.waitUntil(
-    caches.keys().then(function(keyList) {
-      return Promise.all(keyList.map(function(key) {
+    caches.keys().then(function (keyList) {
+      return Promise.all(keyList.map(function (key) {
         if (key !== CACHE_NAME) {
           console.log('[ServiceWorker] Removing old cache', key);
           return caches.delete(key);
