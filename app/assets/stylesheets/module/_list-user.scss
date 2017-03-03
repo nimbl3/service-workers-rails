@@ -1,0 +1,68 @@
+.list-user {
+  @include make-row($grid-gutter-width/2);
+
+  list-style: none;
+  padding: $grid-gutter-width;
+  margin-bottom: 0;
+  background: map-get($brand-gray, 'lightest');
+
+  .user-item {
+    @include make-col($grid-gutter-width/2);
+    @include make-col-span(6);
+    margin-bottom: $grid-gutter-width/2;
+
+    text-align: center;
+
+    @include media-breakpoint-up(sm) {
+      @include make-col-span(4);
+    }
+
+    @include media-breakpoint-up(lg) {
+      @include make-col-span(3);
+    }
+
+    @media (min-width: map-get($grid-breakpoints, 'xl') * 1.25) {
+      @include make-col-span(2);
+    }
+  }
+
+  .user-card {
+    padding: 0;
+    background: #fff;
+    border: 1px solid map-get($brand-gray, 'lighter');
+  }
+
+  .image-container {
+    height: 11.875rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .cover-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: inherit;
+    position: relative;
+
+    background-size: cover;
+    background-position: center 25%;
+    background-repeat: no-repeat;
+    background-color: map-get($brand-gray, 'lighter');
+
+    &::before {
+      @include transition(background .3s ease);
+      content: '';
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      background: none;
+    }
+  }
+}
